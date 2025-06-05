@@ -1,0 +1,16 @@
+@RELATION sales
+
+@ATTRIBUTE Date STRING
+@ATTRIBUTE Product STRING
+@ATTRIBUTE ProductID NUMERIC
+@ATTRIBUTE Category {Electronics,Furniture,Gadgets}
+@ATTRIBUTE Price NUMERIC
+@ATTRIBUTE DiscountPercentage NUMERIC
+@ATTRIBUTE IsOnSale {0,1}
+
+@DATA
+2023-01-01,Computer Screen,123,Electronics,99.9,10,0
+2022-07-02,Television,456,Electronics,110.0,5,0
+2020-04-04,Chair,789,Furniture,30.0,0,1
+2022-06-04,Tablet,321,Gadgets,49.9,15,1
+2024-01-02,Smartphone,123,Gadgets,70.0,10,0
