@@ -1,13 +1,13 @@
 import pandas as pd
 
-def pandas_dataframe_to_arff(df, outputfile, relation_name="test", label_name="label"):
+def pandas_dataframe_to_arff(df, outputfile, relation_name="test"):
     """
     Converts a pandas DataFrame to ARFF format.
-
+    
     Args:
         df (pd.DataFrame): The input DataFrame.
+        outputfile (str): The path where the ARFF file will be written.
         relation_name (str, optional): The name of the relation. Defaults to "test".
-        label_name (str, optional): The name of the target variable. Defaults to "label".
 
     Returns:
         None
@@ -22,10 +22,7 @@ def pandas_dataframe_to_arff(df, outputfile, relation_name="test", label_name="l
         arff_str += "@ATTRIBUTE " + columnname + " "
 
         # Add the data type of the attribute
-        if columnname == label_name:
-            # The target variable is binary classification (0/1)
-            arff_str += "{0,1}\n"
-        elif pd.api.types.is_numeric_dtype(columntype):
+        if pd.api.types.is_numeric_dtype(columntype):
             # The column contains numeric data
             arff_str += "NUMERIC\n"
         elif pd.api.types.is_categorical_dtype(columntype):
@@ -52,12 +49,15 @@ def pandas_dataframe_to_arff(df, outputfile, relation_name="test", label_name="l
 def arff_to_pandas_dataframe(arfffile, dtype={}):
     """
     Converts an ARFF file to a pandas DataFrame.
+    
     Args:
         arfffile (str): The path to the ARFF file.
         dtype (dict): A dictionary mapping column names to their respective data types.
+
     Returns:
         pd.DataFrame: The converted DataFrame.
     """
+
     # Open the ARFF file for reading
     with open(arfffile, 'r') as infile:
         # Initialize an empty list to store attribute names and types
@@ -89,17 +89,16 @@ def arff_to_pandas_dataframe(arfffile, dtype={}):
 
     return df  
 
-def csv_to_arff(csvfile, arfffile, dtype, relation_name="test", label_name="label"):
+def csv_to_arff(csvfile, arfffile, dtype, relation_name="test"):
     """
     Converts a CSV file to an ARFF file.
-
+    
     Args:
         csvfile (str): The path to the CSV file.
         arfffile (str): The path where the ARFF file will be written.
         dtype (dict): A dictionary mapping column names to their respective data types.
         relation_name (str, optional): The name of the relationship in the ARFF file. Defaults to "test".
-        label_name (str, optional): The name of the target variable in the CSV file. Defaults to "label".
-
+    
     Returns:
         None
     """
@@ -114,14 +113,21 @@ def csv_to_arff(csvfile, arfffile, dtype, relation_name="test", label_name="labe
             columntype = dtype[columnname]
             # Add the attribute name
             arff_str += "@ATTRIBUTE " + columnname + " "
+
     
             # Add the data type of the attribute
-            if columnname == label_name:
-                # The target variable is binary classification (0/1)
-                arff_str += "{0,1}\n"
-            elif pd.api.types.is_numeric_dtype(columntype):
+            if pd.api.types.is_numeric_dtype(columntype[:len("category")]):
                 # The column contains numeric data
                 arff_str += "NUMERIC\n"
+            elif pd.api.types.is_categorical_dtype(columntype[:len("category")]):
+                # The column contains categorical data
+                cat_types = columntype[columntype.find("{")+1:columntype.find("}")].split(',')
+                arff_str += "{" + ','.join(cat_types) + "}\n"
+            elif pd.api.types.is_datetime64_any_dtype(columntype[:len("category")]):
+                # The column contains date data
+                # arff_str += "DATE \"yyyy-mm-dd\"\n"
+                # Dates stored as strings for now
+                arff_str += "STRING\n"
             else:
                 # The column is a string
                 arff_str += "STRING\n"
