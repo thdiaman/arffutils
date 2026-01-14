@@ -2,8 +2,8 @@
 Python library to convert from and to ARFF files
 
 # Installation
-Currently the package is under development, so one can install it using the command:  
-`pip install https://github.com/thdiaman/arffutils/tarball/master`
+You can install the package using the command:  
+`pip install arffutils`
 
 # Running
 The package contains four functions:

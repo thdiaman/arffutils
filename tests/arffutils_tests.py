@@ -9,7 +9,7 @@ def test_pandas_dataframe_to_arff():
                                                   'Price': 'float', 'DiscountPercentage': 'int', 'IsOnSale': 'category'}) #, parse_dates = ["Date"])
 
     # Convert the DataFrame to ARFF file
-    pandas_dataframe_to_arff(df, "./tests/temp.arff", relation_name="sales", label_name="IsOnSale")
+    pandas_dataframe_to_arff(df, "./tests/temp.arff", relation_name="sales")
 
     # Test the output    
     assert cmp("./tests/data.arff","./tests/temp.arff", shallow = False), "Test test_pandas_dataframe_to_arff failed"

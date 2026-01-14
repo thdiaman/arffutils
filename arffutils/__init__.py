@@ -9,9 +9,9 @@ if _get_version is not None:
     try:
         __version__ = _get_version('arffutils')
     except PackageNotFoundError:
-        __version__ = "0.1.0"
+        __version__ = "0.1.1"
 else:
-    __version__ = "0.1.0"
+    __version__ = "0.1.1"
 
 from .arffutils import pandas_dataframe_to_arff, arff_to_pandas_dataframe, csv_to_arff, arff_to_csv
 
